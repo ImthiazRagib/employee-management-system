@@ -5,7 +5,7 @@ import SearchComponent from './components/SearchComponent';
 import TableComponent from './components/TableComponent';
 import EmployeeCollection from './models/EmployeeCollection';
 import DataService from './services/DataService';
-import { debounce } from './utils/helpers';
+import { debounce, exportCSV, exportJSON } from './utils/helpers';
 
 const api = new EmployeeAPI('https://dummyjson.com/users');
 const dataService = new DataService(api);
@@ -34,6 +34,15 @@ function render() {
   pagination.render(filteredData.length, currentPage, perPage);
 }
 
+// Export buttons
+document.getElementById("exportCSV").onclick = () =>
+  exportCSV(collection.employees);
+
+document.getElementById("exportJSON").onclick = () =>
+  exportJSON(collection.employees); 
+
+
+// Add button
 const modal = new ModalComponent();
 
 document.getElementById("addBtn").onclick = () => {

@@ -3,6 +3,7 @@ import ModalComponent from './components/ModalComponent';
 import PaginationComponent from './components/PaginationComponents';
 import SearchComponent from './components/SearchComponent';
 import TableComponent from './components/TableComponent';
+import Employee from './models/Employee';
 import EmployeeCollection from './models/EmployeeCollection';
 import DataService from './services/DataService';
 import { debounce, exportCSV, exportJSON } from './utils/helpers';
@@ -73,7 +74,30 @@ const search = new SearchComponent(
   debounce(handleSearch, 300)
 );
 
-// Delete
+// Add Employee
+document.getElementById("addBtn").onclick = () => {
+  modal.open((data) => {
+    // Create Employee instance
+    const newEmployee = new Employee({
+      id: Date.now(), // unique ID
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      department: data.department,
+      role: data.role
+    });
+
+    // Add to collection
+    collection.add(newEmployee);
+
+    // Refresh filtered data and table
+    filteredData = collection.employees;
+    currentPage = 1;
+    render();
+  });
+};
+
+// Delete Employee
 function handleDelete(id) {
   // 1️⃣ Show confirmation
   const confirmed = confirm("Are you sure you want to delete this employee?");

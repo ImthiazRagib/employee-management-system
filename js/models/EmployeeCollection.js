@@ -8,7 +8,7 @@ export default class EmployeeCollection {
     }
 
     add(employee) {
-        this.employees.push(employee);
+        this.employees.unshift(employee);
     }
 
     deleteById(id) {

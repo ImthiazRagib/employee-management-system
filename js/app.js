@@ -23,6 +23,7 @@ const perPage = 5;
 let filteredData = [];
 
 async function init() {
+  //* Load initial data
   const employees = await dataService.getEmployees();
   collection.setEmployees(employees);
   filteredData = employees;
@@ -30,12 +31,13 @@ async function init() {
 }
 
 function render() {
+  //* Paginate filtered data
   const paginated = collection.paginate(filteredData, currentPage, perPage);
   table.render(paginated);
   pagination.render(filteredData.length, currentPage, perPage);
 }
 
-// Export buttons
+//* Export buttons
 document.getElementById("exportCSV").onclick = () =>
   exportCSV(collection.employees);
 
@@ -43,7 +45,7 @@ document.getElementById("exportJSON").onclick = () =>
   exportJSON(collection.employees); 
 
 
-// Add button
+//* Add button
 const modal = new ModalComponent();
 
 document.getElementById("addBtn").onclick = () => {
@@ -58,21 +60,11 @@ document.getElementById("addBtn").onclick = () => {
   });
 };
 
-function handleSearch(query) {
-  currentPage = 1;
-  filteredData = collection.search(query);
-  render();
-}
-
 function handlePageChange(page) {
   currentPage = page;
   render();
 }
 
-const search = new SearchComponent(
-  document.getElementById('search-container'),
-  debounce(handleSearch, 300)
-);
 
 // Add Employee
 document.getElementById("addBtn").onclick = () => {
@@ -112,6 +104,18 @@ function handleDelete(id) {
   // 4️⃣ Re-render table & pagination
   render();
 }
+
+
+//* Search Filter
+function handleSearch(query) {
+  currentPage = 1;
+  filteredData = collection.search(query);
+  render();
+}
+const search = new SearchComponent(
+  document.getElementById('search-container'),
+  debounce(handleSearch, 300)
+);
 
 search.render();
 init();

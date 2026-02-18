@@ -2,10 +2,10 @@
    Base: Mobile First
 ========================= */
 
-/* Fix width calculations */
 *,
 *::before,
 *::after {
+  /* Fix width calculations */
   box-sizing: border-box;
 }
 

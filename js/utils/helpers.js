@@ -33,3 +33,14 @@ function downloadBlob(blob, filename) {
   link.download = filename;
   link.click();
 }
+
+
+export function showLoading() {
+  const overlay = document.getElementById("loading-overlay");
+  if (overlay) overlay.classList.add("show");
+}
+
+export function hideLoading() {
+  const overlay = document.getElementById("loading-overlay");
+  if (overlay) overlay.classList.remove("show");
+}

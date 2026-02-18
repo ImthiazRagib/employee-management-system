@@ -3,15 +3,16 @@ import ModalComponent from './components/ModalComponent';
 import PaginationComponent from './components/PaginationComponents';
 import SearchComponent from './components/SearchComponent';
 import TableComponent from './components/TableComponent';
+import Employee from './models/Employee';
 import EmployeeCollection from './models/EmployeeCollection';
 import DataService from './services/DataService';
-import { debounce } from './utils/helpers';
+import { debounce, exportCSV, exportJSON } from './utils/helpers';
 
 const api = new EmployeeAPI('https://dummyjson.com/users');
 const dataService = new DataService(api);
 const collection = new EmployeeCollection();
 
-const table = new TableComponent(document.getElementById('table-container'));
+const table = new TableComponent(document.getElementById('table-container'), handleDelete);
 const pagination = new PaginationComponent(
   document.getElementById('pagination-container'),
   handlePageChange
@@ -22,6 +23,7 @@ const perPage = 5;
 let filteredData = [];
 
 async function init() {
+  //* Load initial data
   const employees = await dataService.getEmployees();
   collection.setEmployees(employees);
   filteredData = employees;
@@ -29,11 +31,21 @@ async function init() {
 }
 
 function render() {
+  //* Paginate filtered data
   const paginated = collection.paginate(filteredData, currentPage, perPage);
   table.render(paginated);
   pagination.render(filteredData.length, currentPage, perPage);
 }
 
+//* Export buttons
+document.getElementById("exportCSV").onclick = () =>
+  exportCSV(collection.employees);
+
+document.getElementById("exportJSON").onclick = () =>
+  exportJSON(collection.employees); 
+
+
+//* Add button
 const modal = new ModalComponent();
 
 document.getElementById("addBtn").onclick = () => {
@@ -48,17 +60,58 @@ document.getElementById("addBtn").onclick = () => {
   });
 };
 
-function handleSearch(query) {
-  currentPage = 1;
-  filteredData = collection.search(query);
-  render();
-}
-
 function handlePageChange(page) {
   currentPage = page;
   render();
 }
 
+
+// Add Employee
+document.getElementById("addBtn").onclick = () => {
+  modal.open((data) => {
+    // Create Employee instance
+    const newEmployee = new Employee({
+      id: Date.now(), // unique ID
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      department: data.department,
+      role: data.role
+    });
+
+    // Add to collection
+    collection.add(newEmployee);
+
+    // Refresh filtered data and table
+    filteredData = collection.employees;
+    currentPage = 1;
+    render();
+  });
+};
+
+// Delete Employee
+function handleDelete(id) {
+  // 1️⃣ Show confirmation
+  const confirmed = confirm("Are you sure you want to delete this employee?");
+  if (!confirmed) return;
+
+  // 2️⃣ Update the model
+  collection.deleteById(id);
+
+  // 3️⃣ Update filtered data (maintains search/filter)
+  filteredData = collection.search(searchInput.value || "");
+  
+  // 4️⃣ Re-render table & pagination
+  render();
+}
+
+
+//* Search Filter
+function handleSearch(query) {
+  currentPage = 1;
+  filteredData = collection.search(query);
+  render();
+}
 const search = new SearchComponent(
   document.getElementById('search-container'),
   debounce(handleSearch, 300)

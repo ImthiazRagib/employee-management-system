@@ -2,10 +2,10 @@
    Base: Mobile First
 ========================= */
 
-/* Fix width calculations */
 *,
 *::before,
 *::after {
+  /* Fix width calculations */
   box-sizing: border-box;
 }
 
@@ -23,6 +23,13 @@ body {
   color: #222;
   margin-bottom: 20px;
   text-align: center;
+}
+
+.btn-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
 }
 
 .btn {
@@ -180,5 +187,126 @@ button.active {
 
   tr:hover td {
     background: #eef2ff;
+  }
+}
+
+/* =========================
+   Modal Base
+========================= */
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+}
+
+.modal.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-content {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 20px;
+  width: 90%;
+  max-width: 450px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  transform: translateY(-30px);
+  transition: transform 0.3s ease;
+}
+
+.modal.show .modal-content {
+  transform: translateY(0);
+}
+
+/* Modal header */
+.modal-content h2 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: #4f46e5;
+  font-size: 1.4rem;
+  text-align: center;
+}
+
+/* Form Inputs */
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal-content input,
+.modal-content select {
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #d0d5dd;
+  font-size: 14px;
+  width: 100%;
+}
+
+.modal-content input:focus,
+.modal-content select:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+/* Actions */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.modal-actions button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.modal-actions button.save-btn {
+  background: #4f46e5;
+  color: white;
+}
+
+.modal-actions button.save-btn:hover {
+  background: #4338ca;
+}
+
+.modal-actions button.cancel-btn {
+  background: #e0e7ff;
+  color: #4f46e5;
+}
+
+.modal-actions button.cancel-btn:hover {
+  background: #c7d2fe;
+}
+
+/* Responsive */
+@media (min-width: 480px) {
+  .modal-content {
+    width: 400px;
+  }
+}
+
+@media (min-width: 768px) {
+  .modal-content {
+    width: 450px;
   }
 }

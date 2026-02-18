@@ -310,3 +310,44 @@ button.active {
     width: 450px;
   }
 }
+
+
+/* =========================
+   Loading Spinner
+========================= */
+
+#loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+#loading-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Spinner */
+.spinner {
+  border: 6px solid #e0e7ff;
+  border-top: 6px solid #4f46e5;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

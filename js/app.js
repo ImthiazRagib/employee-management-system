@@ -6,7 +6,7 @@ import TableComponent from './components/TableComponent';
 import Employee from './models/Employee';
 import EmployeeCollection from './models/EmployeeCollection';
 import DataService from './services/DataService';
-import { debounce, exportCSV, exportJSON } from './utils/helpers';
+import { debounce, exportCSV, exportJSON, hideLoading, showLoading } from './utils/helpers';
 
 const api = new EmployeeAPI('https://dummyjson.com/users');
 const dataService = new DataService(api);
@@ -24,7 +24,9 @@ let filteredData = [];
 
 async function init() {
   //* Load initial data
+  showLoading();
   const employees = await dataService.getEmployees();
+  hideLoading();
   collection.setEmployees(employees);
   filteredData = employees;
   render();

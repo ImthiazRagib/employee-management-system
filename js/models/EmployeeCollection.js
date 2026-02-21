@@ -1,6 +1,7 @@
 export default class EmployeeCollection {
     constructor(employees = []) {
         this.employees = employees;
+        this.filters = { query: "", department: "", role: "" };
     }
 
     setEmployees(employees) {
@@ -16,16 +17,31 @@ export default class EmployeeCollection {
     }
 
 
-    search(query) {
-        if (!query) return this.employees;
+    filter({ query, department, role }) {
+        let result = this.employees;
 
-        // Search by full name, email, department, and role
-        return this.employees.filter(emp =>
-            emp.fullName.toLowerCase().includes(query.toLowerCase()) ||
-            emp.email.toLowerCase().includes(query.toLowerCase()) ||
-            //   emp.department.toLowerCase().includes(query.toLowerCase()) ||
-            emp.role.toLowerCase().includes(query.toLowerCase())
-        );
+        // Filter by department if provided
+        if (department) {
+            result = result.filter(emp => emp.department === department);
+        }
+
+        // Filter by role if provided
+        if (role) {
+            result = result.filter(emp => emp.role === role);
+        }
+
+        // Search by full name, email, department, and role if query provided
+        if (query) {
+            const lowerQuery = query.toLowerCase();
+            result = result.filter(emp =>
+                emp.fullName.toLowerCase().includes(lowerQuery) ||
+                emp.email.toLowerCase().includes(lowerQuery) ||
+                emp.role.toLowerCase().includes(lowerQuery)
+            );
+        }
+
+        this.filters = { query, department, role };
+        return result;
     }
 
     paginate(data, page = 1, perPage = 5) {
@@ -35,5 +51,9 @@ export default class EmployeeCollection {
 
     get total() {
         return this.employees.length;
+    }
+
+    getFilters() {
+        return this.filters;
     }
 }

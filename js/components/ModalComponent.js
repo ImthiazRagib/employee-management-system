@@ -66,4 +66,12 @@ export default class ModalComponent {
     this.modal.classList.remove("show");
     setTimeout(() => (this.modal.innerHTML = ""), 300);
   }
+
+  setDepartmentOptions(departments) {
+    this.departments = departments;
+  }
+  
+  setRoleOptions(roles) {
+    this.roles = roles;
+  }
 }

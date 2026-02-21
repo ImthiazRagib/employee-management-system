@@ -15,29 +15,52 @@ const collection = new EmployeeCollection();
 const modal = new ModalComponent();
 const alertModal = new AlertModalComponent();
 
-
-
-const table = new TableComponent(document.getElementById('table-container'), handleDelete);
-const pagination = new PaginationComponent(
-  document.getElementById('pagination-container'),
-  handlePageChange
-);
-
+//* DOMs
+const departmentFilter = document.getElementById("departmentFilter");
+const roleFilter = document.getElementById("roleFilter");
 const exportBtn = document.getElementById("exportCSV");
 const jsonExportBtn = document.getElementById("exportJSON");
+const tableContainer = document.getElementById('table-container');
+const paginationContainer = document.getElementById('pagination-container');
+const searchContainer = document.getElementById('search-container');
+
+const table = new TableComponent(tableContainer, handleDelete);
+const pagination = new PaginationComponent(
+  paginationContainer,
+  handlePageChange
+);
 
 let currentPage = 1;
 const perPage = 5;
 let filteredData = [];
 
+const setFilterDropdowns = (employees) => {
+  // Build filter controls
+  const depts = [...new Set(employees.map(e => e.department))].sort();
+  const roles = [...new Set(employees.map(e => e.role))].sort();
+
+  const deptOptions = depts.map(d => `<option value="${d}">${d}</option>`).join('');
+  const roleOptions = roles.map(r => `<option value="${r}">${r}</option>`).join('');
+
+  departmentFilter.innerHTML = '<option value="">All Departments</option>' + deptOptions;
+  roleFilter.innerHTML = '<option value="">All Roles</option>' + roleOptions;
+
+  modal.setDepartmentOptions(depts);
+  modal.setRoleOptions(roles);
+}
+
 async function init() {
   //* Load initial data
   showLoading();
   const employees = await dataService.getEmployees();
-  hideLoading();
   collection.setEmployees(employees);
   filteredData = employees;
+  setFilterDropdowns(employees);
+  hideLoading();
   render();
+
+
+  // UI Updates
   lucide.createIcons();
 }
 
@@ -59,7 +82,7 @@ exportBtn.onclick = () =>
   exportCSV(filteredData);
 
 jsonExportBtn.onclick = () =>
-  exportJSON(filteredData); 
+  exportJSON(filteredData);
 
 
 //* Add button
@@ -81,7 +104,7 @@ function handlePageChange(page) {
 }
 
 
-// Add Employee
+//* Add Employee
 document.getElementById("addBtn").onclick = () => {
   modal.open((data) => {
     // Create Employee instance
@@ -115,8 +138,8 @@ function handleDelete(id) {
       collection.deleteById(id);
 
       //* Update filtered data (maintains search/filter)
-      filteredData = collection.search(searchInput.value || "");
-      
+      filteredData = collection.filter({ ...collection.getFilters() });
+
       //* Re-render table & pagination
       render();
     }
@@ -125,15 +148,37 @@ function handleDelete(id) {
 
 
 //* Search Filter
-function handleSearch(query) {
+function handleSearch(filters) {
   currentPage = 1;
-  filteredData = collection.search(query);
+  filteredData = collection.filter({ ...collection.getFilters(), query: filters.query || '' });
   render();
 }
 const search = new SearchComponent(
-  document.getElementById('search-container'),
-  debounce(handleSearch, 300)
+  searchContainer,
+  debounce((filters) => handleSearch(filters), 300),
+  collection.getFilters()
 );
+
+//* Dropdown Filters
+departmentFilter.onchange = () => {
+  currentPage = 1;
+  filteredData = collection.filter({
+    ...collection.getFilters(),
+    department: departmentFilter.value || undefined,
+    role: roleFilter.value || undefined
+  });
+  render();
+};
+
+roleFilter.onchange = () => {
+  currentPage = 1;
+  filteredData = collection.filter({
+    ...collection.getFilters(),
+    department: departmentFilter.value || undefined,
+    role: roleFilter.value || undefined
+  });
+  render();
+};
 
 search.render();
 init();

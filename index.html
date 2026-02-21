@@ -14,9 +14,17 @@
     <h1 class="title">Employee Management System</h1>
 
     <div class="btn-container">
-      <button id="exportCSV" class="btn">Export CSV</button>
-      <button id="exportJSON" class="btn">Export JSON</button>
-      <button id="addBtn" class="btn">Add Employee</button>
+      <button id="exportCSV" class="btn">
+        <i data-lucide="download"></i>
+        Export CSV
+      </button>
+      <button id="exportJSON" class="btn">
+        <i data-lucide="download"></i>
+        Export JSON
+      </button>
+      <button id="addBtn" class="btn">
+        <i data-lucide="user-plus"></i>
+        Add Employee</button>
     </div>
     <div id="search-container"></div>
     <div id="table-container"></div>
@@ -26,6 +34,7 @@
     <div class="spinner"></div>
   </div>
 
+  <script src="https://unpkg.com/lucide@latest"></script>
   <script type="module" src="./js/app.js"></script>
 </body>
 

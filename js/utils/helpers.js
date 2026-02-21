@@ -8,11 +8,19 @@ export const debounce = (fn, delay = 300) => {
 
 
 export function exportJSON(data) {
+  if (data.length === 0) {
+    alert("No data to export.");
+    return;
+  }
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
   downloadBlob(blob, "employees.json");
 }
 
 export function exportCSV(data) {
+  if (data.length === 0) {
+    alert("No data to export.");
+    return;
+  }
   const headers = ["ID", "Name", "Email", "Department", "Role"];
   const rows = data.map(emp => [
     emp.id,

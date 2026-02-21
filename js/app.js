@@ -18,6 +18,9 @@ const pagination = new PaginationComponent(
   handlePageChange
 );
 
+const exportBtn = document.getElementById("exportCSV");
+const jsonExportBtn = document.getElementById("exportJSON");
+
 let currentPage = 1;
 const perPage = 5;
 let filteredData = [];
@@ -30,6 +33,7 @@ async function init() {
   collection.setEmployees(employees);
   filteredData = employees;
   render();
+  lucide.createIcons();
 }
 
 function render() {
@@ -37,14 +41,19 @@ function render() {
   const paginated = collection.paginate(filteredData, currentPage, perPage);
   table.render(paginated);
   pagination.render(filteredData.length, currentPage, perPage);
+
+  //* Disable/enable export buttons based on data count
+  const hasData = filteredData.length > 0;
+  exportBtn.disabled = !hasData;
+  jsonExportBtn.disabled = !hasData;
 }
-
 //* Export buttons
-document.getElementById("exportCSV").onclick = () =>
-  exportCSV(collection.employees);
+//* Export filtered data
+exportBtn.onclick = () =>
+  exportCSV(filteredData);
 
-document.getElementById("exportJSON").onclick = () =>
-  exportJSON(collection.employees); 
+jsonExportBtn.onclick = () =>
+  exportJSON(filteredData); 
 
 
 //* Add button

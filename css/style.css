@@ -33,6 +33,9 @@ body {
 }
 
 .btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 12px 24px;
   border: none;
   border-radius: 8px;
@@ -42,6 +45,25 @@ body {
   font-weight: 500;
   cursor: pointer;
   margin: 10px 0;
+}
+
+.btn[disabled] {
+  background: #93c5fd;
+  cursor: not-allowed;
+}
+.btn svg {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+.no-data-found{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.92);
 }
 
 .container {

@@ -4,6 +4,19 @@ export default class TableComponent {
     this.onDelete = onDelete; // callback when delete is requested
   }
   render(employees) {
+    // Build filter controls
+    const depts = [...new Set(employees.map(e => e.department))].sort();
+    const roles = [...new Set(employees.map(e => e.role))].sort();
+
+    const deptOptions = depts.map(d => `<option value="${d}">${d}</option>`).join('');
+    const roleOptions = roles.map(r => `<option value="${r}">${r}</option>`).join('');
+
+    const departmentDropdown = document.getElementById("departmentFilter");
+    departmentDropdown.innerHTML = '<option value="">All Departments</option>' + deptOptions;
+
+    const roleDropdown = document.getElementById("roleFilter");
+    roleDropdown.innerHTML = '<option value="">All Roles</option>' + roleOptions;
+
     if (!employees || employees.length === 0) {
       this.container.innerHTML = `
         <div class="no-data-found">

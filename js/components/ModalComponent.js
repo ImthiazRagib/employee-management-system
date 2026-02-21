@@ -1,29 +1,15 @@
+import { DEPARTMENTS, ROLES } from "../utils/enum/employee.enums";
+
 export default class ModalComponent {
   constructor() {
     this.modal = document.createElement("div");
     this.modal.className = "modal";
     document.body.appendChild(this.modal);
     this.departments = [
-      "Engineering",
-      "Human Resources",
-      "Sales",
-      "Marketing",
-      "Finance",
-      "Operations",
-      "Customer Support",
-      "IT",
-      "Legal"
+      ...Object.values(DEPARTMENTS)
     ];
     this.roles = [
-      "Manager",
-      "Developer",
-      "Designer",
-      "QA Engineer",
-      "HR Specialist",
-      "Sales Representative",
-      "Product Manager",
-      "Data Analyst",
-      "Intern"
+     ...Object.values(ROLES)
     ];
   }
 

@@ -450,3 +450,32 @@ button.active {
   justify-content: flex-end;
   gap: 10px;
 }
+
+/* =========================
+   Filter Bar
+========================= */
+
+.filter-bar {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #ddd;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: white;
+}
+
+.filter-group select {
+  border: none;
+  outline: none;
+  font-size: 14px;
+  background: transparent;
+  cursor: pointer;
+}
